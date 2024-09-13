@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santo Gamer PC Builder</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos Globais */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Menu Lateral */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #0d0d0d, #3a3a3a);
+            color: #fff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar .logo {
+            max-width: 120px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #00bfff;
+            padding-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            color: #e0e0e0;
+            text-decoration: none;
+            display: block;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 1.1em;
+        }
+
+        .sidebar ul li a.active,
+        .sidebar ul li a:hover {
+            background-color: #00bfff;
+            color: #000;
+        }
+
+        /* Conteúdo principal */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            color: #000;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .intro {
+            text-align: center;
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #000000;
+        }
+
+        .intro .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+
+        .intro h1 {
+            font-size: 2.5em;
+            color: #00bfff;
+            margin-bottom: 10px;
+        }
+
+        .intro p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .intro .image-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .intro .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .intro .button-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .intro .button-container button {
+            background-color: #00bfff;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.5em;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .intro .button-container button:hover {
+            background-color: #007acc;
+        }
+
+        .category {
+            display: none;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .component {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .component:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .component img {
+            max-width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .component h3 {
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+
+        .component p {
+            font-size: 1em;
+        }
+
+        /* Resumo Final */
+        .summary {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+
+        .summary h2 {
+            font-size: 1.8em;
+            color: #00bfff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .summary ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        .summary ul li {
+            margin-bottom: 10px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            height: 80px;
+        }
+
+        .summary ul li .left-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .summary ul li img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 8px;
+        }
+
+        .summary ul li span {
+            font-size: 0.85em;
+            color: #fff;
+        }
+
+        .summary ul li .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .summary ul li button {
+            background-color: #00bfff;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .summary ul li button:hover {
+            background-color: #007acc;
+        }
+
+        .summary .price {
+            font-size: 1.5em;
+            color: #00bfff;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .summary .price-box {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            color: #000;
+        }
+
+        .summary .price-box img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .summary .price-box .price {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .summary .price-box .small-text {
+            font-size: 0.7em;
+            color: #666;
+            text-align: right;
+        }
+
+        /* Resumo Flutuante */
+        .floating-summary {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: none;
+            width: 200px;
+        }
+
+        .floating-summary h3 {
+            margin-bottom: 10px;
+            font-size: 1.6em;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #00bfff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .floating-summary ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .floating-summary ul li {
+            margin-bottom: 5px;
+            font-size: 0.85em;
+        }
+
+        .floating-summary .price-box {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 8px;
+            color: #000;
+        }
+
+        .floating-summary .price-box img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .floating-summary .price-box .price {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .floating-summary .price-box .small-text {
+            font-size: 0.7em;
+            color: #666;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <img src="https://cdn.dooca.store/149365/files/santo-gamer-11.png?v=1718748632" alt="Santo Gamer Logo" class="logo">
+        <h2>Monte seu PC</h2>
+        <ul>
+            <li><a href="#" onclick="showCategory('gpu')">Placa de Vídeo</a></li>
+            <li><a href="#" onclick="showCategory('cpu')">Processador</a></li>
+            <li><a href="#" onclick="showCategory('motherboard')">Placa mãe</a></li>
+            <li><a href="#" onclick="showCategory('case')">Gabinete</a></li>
+            <li><a href="#" onclick="showCategory('cooling')">Water Cooler</a></li>
+            <li><a href="#" onclick="showCategory('memory')">Memória</a></li>
+            <li><a href="#" onclick="showCategory('storage')">Armazenamento</a></li>
+            <li><a href="#" onclick="showCategory('psu')">Fonte</a></li>
+            <li><a href="#" onclick="showCategory('fans')">Coolers</a></li>
+            <li><a href="#" onclick="showCategory('add-ons')">Extras</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div id="intro" class="intro">
+            <img src="https://cdn.dooca.store/149365/files/santo-gamer-11.png?v=1718748632" alt="Santo Gamer Logo" class="logo">
+            <h1>Santo Gamer PC Builder</h1>
+            <p>Selecione seus componentes preferidos</p>
+            <p>Obtenha o máximo de performance com seu PC Santo Gamer</p>
+            <div class="image-container">
+                <img src="https://www.corsair.com/pc-builder/WYSIWYG/welcome_2023.webp" alt="Bem-vindo ao Santo Gamer PC Builder">
+                <div class="button-container">
+                    <button onclick="startBuilder()">Monte seu PC</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="category-container" class="category"></div>
+
+        <div id="summary" class="summary">
+            <h2>Seu PC Gamer Ideal</h2>
+            <ul id="summary-list"></ul>
+            <p class="price" id="total">Total PIX: R$ 0,00</p>
+            <p class="price" id="parcelado">Em até 12x sem juros: R$ 0,00</p>
+
+            <div class="fps-section">
+                <h2>Desempenho em Jogos</h2>
+                <div class="fps-bar">
+                    <div class="fps-bar-inner" id="fps-cs2">CS2: 0 FPS</div>
+                </div>
+                <div class="fps-bar">
+                    <div class="fps-bar-inner" id="fps-valorant">Valorant: 0 FPS</div>
+                </div>
+                <div class="fps-bar">
+                    <div class="fps-bar-inner" id="fps-lol">League of Legends: 0 FPS</div>
+                </div>
+                <div class="fps-bar">
+                    <div class="fps-bar-inner" id="fps-gtav">GTA V: 0 FPS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="floating-summary" class="floating-summary">
+        <h3>Seu PC Gamer</h3>
+        <ul id="floating-summary-list"></ul>
+        <div class="price-box">
+            <img src="https://i.pinimg.com/originals/01/9a/2d/019a2d16277d159cd2ef1298a4c60ab8.png" alt="Pix Icon">
+            <span class="price" id="floating-total">R$ 0,00</span>
+        </div>
+        <div class="price-box">
+            <img src="https://static.vecteezy.com/ti/vetor-gratis/p3/6059850-cartao-de-credito-cartao-de-credito-icone-fundo-branco-cartao-de-debito-simbolo-gratis-vetor.jpg" alt="Cartão Icon">
+            <div>
+                <span class="price" id="floating-total-parcelado">R$ 0,00</span>
+                <div class="small-text">Em até 12x sem juros</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sheetId = '1Wk2XW35B3c9ychm23ISYE67usBdkQjI2oNTEN3F9y9w';
+        const apiKey = 'AIzaSyB4wz1qEMVgCOPDUpeLnDmLfIGOkYYQKM4';
+        const apiUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Sheet1?key=${apiKey}`;
+        let selectedComponents = {};
+        let isEditing = false;
+        let currentEditingCategory = null;
+
+        function fetchProducts() {
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Data fetched from Sheets:", data);
+                    populateCategories(data.values);
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+        }
+
+        function populateCategories(data) {
+            if (data && data.length > 1) {
+                const categories = {
+                    gpu: [],
+                    cpu: [],
+                    motherboard: [],
+                    case: [],
+                    cooling: [],
+                    memory: [],
+                    storage: [],
+                    psu: [],
+                    fans: [],
+                    add_ons: []
+                };
+                data.slice(1).forEach(row => {
+                    const [category, name, price, img] = row;
+                    if (categories[category]) {
+                        categories[category].push({ name, price: parseFloat(price), img });
+                    }
+                });
+                window.categories = categories;
+            } else {
+                console.error("No data found or incorrect format");
+            }
+        }
+
+        function showCategory(category) {
+            let container = document.getElementById('category-container');
+            container.innerHTML = '';
+            window.categories[category].forEach(component => {
+                let item = document.createElement('div');
+                item.className = 'component';
+                item.innerHTML = `
+                    <img src="${component.img}" alt="${component.name}">
+                    <h3>${component.name}</h3>
+                `;
+                item.onclick = function() {
+                    selectedComponents[category] = component;
+                    updateFloatingSummary();
+                    if (isEditing) {
+                        isEditing = false;
+                        currentEditingCategory = null;
+                        showSummary();
+                    } else {
+                        let nextCategory = getNextCategory(category);
+                        if (nextCategory) {
+                            showCategory(nextCategory);
+                        } else {
+                            showSummary();
+                        }
+                    }
+                };
+                container.appendChild(item);
+            });
+        }
+
+        function getNextCategory(currentCategory) {
+            const categoryOrder = [
+                'gpu', 'cpu', 'motherboard', 'case', 'cooling', 'memory', 'storage', 'psu', 'fans', 'add_ons'
+            ];
+            const index = categoryOrder.indexOf(currentCategory);
+            return index >= 0 && index < categoryOrder.length - 1 ? categoryOrder[index + 1] : null;
+        }
+
+        function showSummary() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('category-container').style.display = 'none';
+            document.getElementById('summary').style.display = 'flex';
+
+            let summaryList = document.getElementById('summary-list');
+            summaryList.innerHTML = '';
+            let total = 0;
+            for (let category in selectedComponents) {
+                let component = selectedComponents[category];
+                let listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="left-content">
+                        <img src="${component.img}" alt="${component.name}">
+                        <span>${component.name}</span>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="editProduct('${category}')">Editar</button>
+                        <button onclick="deleteProduct('${category}')">Excluir</button>
+                    </div>
+                `;
+                summaryList.appendChild(listItem);
+                total += component.price;
+            }
+            document.getElementById('total').innerText = `Total PIX: R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('parcelado').innerText = `Em até 12x sem juros: R$ ${(total / 12).toFixed(2).replace('.', ',')}`;
+
+            calculateFPS(total);
+        }
+
+        function editProduct(category) {
+            isEditing = true;
+            currentEditingCategory = category;
+            showCategory(category);
+        }
+
+        function deleteProduct(category) {
+            delete selectedComponents[category];
+            showSummary();
+            updateFloatingSummary();
+        }
+
+        function calculateFPS(totalPrice) {
+            const fpsCS2 = Math.min(Math.floor(totalPrice / 100 * 1.5), 144);
+            const fpsValorant = Math.min(Math.floor(totalPrice / 100 * 1.7), 240);
+            const fpsLoL = Math.min(Math.floor(totalPrice / 90), 200);
+            const fpsGTAV = Math.min(Math.floor(totalPrice / 150), 120);
+            
+            document.getElementById('fps-cs2').style.width = `${fpsCS2}%`;
+            document.getElementById('fps-cs2').innerText = `CS2: ${fpsCS2} FPS`;
+
+            document.getElementById('fps-valorant').style.width = `${fpsValorant}%`;
+            document.getElementById('fps-valorant').innerText = `Valorant: ${fpsValorant} FPS`;
+
+            document.getElementById('fps-lol').style.width = `${fpsLoL}%`;
+            document.getElementById('fps-lol').innerText = `League of Legends: ${fpsLoL} FPS`;
+
+            document.getElementById('fps-gtav').style.width = `${fpsGTAV}%`;
+            document.getElementById('fps-gtav').innerText = `GTA V: ${fpsGTAV} FPS`;
+        }
+
+        function updateFloatingSummary() {
+            let floatingSummaryList = document.getElementById('floating-summary-list');
+            floatingSummaryList.innerHTML = '';
+            let total = 0;
+            for (let category in selectedComponents) {
+                let component = selectedComponents[category];
+                let listItem = document.createElement('li');
+                listItem.innerText = `${component.name}`;
+                floatingSummaryList.appendChild(listItem);
+                total += component.price;
+            }
+            document.getElementById('floating-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('floating-total-parcelado').innerText = `R$ ${(total / 12).toFixed(2).replace('.', ',')}`;
+            document.getElementById('floating-summary').style.display = 'block';
+        }
+
+        function startBuilder() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('category-container').style.display = 'flex';
+            document.getElementById('summary').style.display = 'none';
+            showCategory('gpu');
+        }
+
+        fetchProducts();
+    </script>
+</body>
+</html>
